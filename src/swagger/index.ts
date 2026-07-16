@@ -4,6 +4,7 @@ import { ProductSchema } from "./components/schemas/product.schema";
 import {ProductIdParameter} from "./components/parameters/product-id.parameter";
 import { ProductResponse } from "./components/responses/product.response";
 import { ProductListResponse } from "./components/responses/product-list.response";
+import { CreateProductRequest } from "./components/requestBodies/create-product.request";
 
 import { ProductTag } from "./tags/product.tag";
 import { CategoryTag } from "./tags/category.tag";
@@ -20,6 +21,9 @@ export const swaggerComponents = {
   responses: {
     ProductResponse,
     ProductListResponse,
+  },
+  requestBodies: {
+    CreateProductRequest,
   },
 };
 
