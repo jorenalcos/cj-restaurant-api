@@ -1,7 +1,10 @@
 import productRepository from "./repository";
+import categoryRepository from "../category/categoryRepository";
 import { prisma } from "../../config/prisma.config";
 import { CreateProductInput } from "./dto/create-product.dto";
 import ApiError from "../../utils/ApiError";
+import { NotFoundError } from "../../errors/NotFoundError";
+import { ConflictError } from "../../errors/ConflictError";
 
 class ProductService {
     async getProducts() {
@@ -20,19 +23,32 @@ class ProductService {
         return product;
     }
 
-    async createProduct(data: CreateProductInput) {
-        const category = await prisma.category.findUnique({
-            where: {
-                id: data.categoryId,
-            }
-        });
+    async createProduct(dto: CreateProductInput) {
+        const category =
+            await categoryRepository.findById(dto.categoryId);
         if (!category) {
-            throw new ApiError(
-                404,
-                "Product not foCategory does not existund"
-            );
+            throw new NotFoundError("Category not found");
         }
-        return productRepository.create(data);
+        const existing =
+            await productRepository.findByName(dto.name);
+        if (existing) {
+            throw new ConflictError("Product already exists");
+        }
+        return productRepository.create({
+            name: dto.name,
+            description: dto.description,
+            price: dto.price,
+            image: dto.image,
+            rating: dto.rating,
+            isAvailable: dto.isAvailable,
+
+            category: {
+                connect: {
+                    id: dto.categoryId,
+                },
+            },
+        });
+
     }
 }
 
