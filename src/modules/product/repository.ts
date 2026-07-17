@@ -45,6 +45,30 @@ class ProductRepository {
         });
 
     }
+
+    async update(id: number, data: Prisma.ProductUpdateInput): Promise<Product> {
+        return prisma.product.update({
+            where: {
+                id,
+            },
+            data,
+        });
+    }
+
+    async findByNameExceptId(id: number, name: string) {
+        return prisma.product.findFirst({
+            where: {
+                id: {
+                    not: id,
+                },
+
+                name: {
+                    equals: name,
+                    mode: "insensitive",
+                },
+            },
+        });
+    }
 }
 
 export default new ProductRepository();

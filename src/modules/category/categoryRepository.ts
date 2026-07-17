@@ -1,7 +1,5 @@
 import { prisma } from "../../config/prisma.config";
 
-import { Prisma, Product } from "@prisma/client";
-
 class CategoryRepository {
      async findById(id: number) {
         return prisma.category.findUnique({

@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import productService from "./service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { successResponse } from "../../utils/response";
+import { ProductIdDto } from "./dto/product-id.dto";
+import { UpdateProductDto } from "./dto/update-product.dto";
 
 class ProductController {
     async getProducts(req: Request, res: Response, next: NextFunction) {
@@ -42,6 +44,19 @@ class ProductController {
         return res.status(201).json({
             success: true,
             message: "Product created successfully",
+            data: product,
+        });
+    }
+
+    async updateProduct(req: Request, res: Response) {
+        const { id } = ProductIdDto.parse(req.params);
+        const dto = UpdateProductDto.parse(req.body);
+        const product = await productService.updateProduct(id, dto);
+
+        return res.status(200).json({
+            success: true,
+            message:
+                "Product updated successfully",
             data: product,
         });
     }
