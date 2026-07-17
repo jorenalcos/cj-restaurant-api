@@ -60,6 +60,18 @@ class ProductController {
             data: product,
         });
     }
+
+    async deleteProduct(req: Request, res: Response) {
+        const { id } = ProductIdDto.parse(req.params);
+        
+        await productService.deleteProduct(id);
+        return res.status(200).json({
+            success: true,
+            message:
+                "Product deleted successfully",
+        });
+
+    }
 }
 
 export default new ProductController();

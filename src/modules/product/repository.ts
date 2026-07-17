@@ -1,5 +1,4 @@
 import { prisma } from "../../config/prisma.config";
-
 import { Prisma, Product } from "@prisma/client";
 
 class ProductRepository {
@@ -8,22 +7,20 @@ class ProductRepository {
             include: {
                 category: true,
             },
+            where: {
+                deletedAt: null,
+            },
         });
     }
 
     async findById(id: number) {
         return prisma.product.findUnique({
-            where: { id },
-            include: {
-                category: true,
-            },
-        });
-    }
-
-    async findCategoryById(id: number) {
-        return prisma.category.findUnique({
             where: {
                 id,
+                deletedAt: null,
+            },
+            include: {
+                category: true,
             },
         });
     }
@@ -31,6 +28,8 @@ class ProductRepository {
     async findByName(name: string) {
         return prisma.product.findFirst({
             where: {
+                deletedAt: null,
+
                 name: {
                     equals: name,
                     mode: "insensitive",
@@ -50,6 +49,7 @@ class ProductRepository {
         return prisma.product.update({
             where: {
                 id,
+                deletedAt: null,
             },
             data,
         });
@@ -58,6 +58,7 @@ class ProductRepository {
     async findByNameExceptId(id: number, name: string) {
         return prisma.product.findFirst({
             where: {
+                deletedAt: null,
                 id: {
                     not: id,
                 },
@@ -66,6 +67,17 @@ class ProductRepository {
                     equals: name,
                     mode: "insensitive",
                 },
+            },
+        });
+    }
+
+    async softDelete(id: number) {
+        return prisma.product.update({
+            where: {
+                id,
+            },
+            data: {
+                deletedAt: new Date(),
             },
         });
     }
