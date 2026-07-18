@@ -1,4 +1,4 @@
-import { prisma } from "../../config/prisma.config";
+import prisma from "../../config/prisma";
 import { Prisma, Product } from "@prisma/client";
 
 class ProductRepository {

@@ -8,6 +8,9 @@ import { ProductListResponse } from "./components/responses/product-list.respons
 import { ProductTag } from "./tags/product.tag";
 import { CategoryTag } from "./tags/category.tag";
 import { requestBodies } from "./components/request-bodies";
+import { CategoryIdParameter } from "./components/parameters/category-id.parameter";
+import { CategoryListResponse } from "./components/responses/category-list.response";
+import { CategoryResponse } from "./components/responses/category.response";
 
 export const swaggerComponents = {
     schemas: {
@@ -18,10 +21,14 @@ export const swaggerComponents = {
     },
     parameters: {
         ProductId: ProductIdParameter,
+        CategoryId: CategoryIdParameter,
     },
     responses: {
         ProductResponse,
         ProductListResponse,
+
+        CategoryResponse,
+        CategoryListResponse,
     },
     requestBodies: {
         ...requestBodies,

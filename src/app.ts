@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 
-import routes from "./routes";
+import routes from "./routes/v1";
 
 import { swaggerSpec } from "./config/swagger";
 
@@ -22,7 +22,7 @@ app.use(
   swaggerUi.setup(swaggerSpec)
 );
 
-app.use("/api", routes);
+app.use("/api/v1/", routes);
 
 app.use(notFoundMiddleware);
 
