@@ -1,8 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, UserRole } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const hashedPassword = await bcrypt.hash("admin123", 10);
+
   const coffee = await prisma.category.upsert({
     where: { name: "Coffee" },
     update: {},
@@ -47,6 +50,24 @@ async function main() {
       },
     ],
   });
+
+  console.log("Seeding user...");
+
+  await prisma.user.upsert({
+    where: {
+      email: "admin@cjrestaurant.com",
+    },
+    update: {},
+    create: {
+      firstName: "Admin",
+      lastName: "Administrator",
+      email: "admin@cjrestaurant.com",
+      password: hashedPassword,
+      role: UserRole.ADMIN,
+    },
+  });
+
+  console.log("User seeded!");
 
   console.log("✅ Seed completed.");
 }
