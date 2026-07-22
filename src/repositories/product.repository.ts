@@ -14,10 +14,22 @@ export class ProductRepository {
   }
 
   async findById(id: number) {
-    return prisma.product.findUnique({
-      where: { id },
+    return prisma.product.findFirst({
+      where: {
+        id,
+        deletedAt: null,
+      },
       include: {
         category: true,
+      },
+    });
+  }
+
+  async countByCategory(categoryId: number) {
+    return prisma.product.count({
+      where: {
+        categoryId,
+        deletedAt: null,
       },
     });
   }

@@ -1,4 +1,4 @@
-import prisma from "../../config/prisma";
+import { prisma } from "../../config/prisma";
 import { Category, Prisma } from "@prisma/client";
 import { UpdateCategoryInput } from "./dto/update-category.dto";
 
