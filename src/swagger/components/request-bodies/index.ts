@@ -1,3 +1,4 @@
+import { ConflictResponse } from "../responses/conflict.response";
 import { CreateCategoryRequest } from "./create-category.request";
 import { CreateProductRequest } from "./create-product.request";
 import { LoginRequest } from "./login.request";
@@ -12,4 +13,6 @@ export const requestBodies = {
   UpdateCategoryRequest,
 
   LoginRequest,
+
+  ConflictResponse
 };

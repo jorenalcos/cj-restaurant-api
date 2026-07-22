@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import authRepository from "./auth.repository";
 import { LoginInput } from "./dto/login.dto";
 import { UnauthorizedError } from "../../errors/UnauthorizedError";
+import { generateAccessToken } from "../../utils/jwt";
 
 class AuthService {
   async login(dto: LoginInput) {
@@ -25,17 +26,11 @@ class AuthService {
       throw new UnauthorizedError("Invalid email or password.");
     }
 
-    const accessToken = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      },
-      process.env.JWT_SECRET!,
-      {
-        expiresIn: process.env.JWT_EXPIRES_IN || "1d",
-      }
-    );
+    const accessToken = generateAccessToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
 
     return {
       accessToken,

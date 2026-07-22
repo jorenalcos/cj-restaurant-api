@@ -23,7 +23,17 @@ const swaggerOptions: swaggerJsdoc.Options = {
 
     tags: swaggerTags,
 
-    components: swaggerComponents,
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          description: "Enter your JWT access token",
+        },
+      },
+      ...swaggerComponents
+    },
   },
 
   apis: ["./src/routes/**/*.ts"],

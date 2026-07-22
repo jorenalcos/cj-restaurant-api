@@ -1,5 +1,6 @@
 import { Router } from "express";
 import categoryController from "../../modules/category/category.controller";
+import { authenticate } from "../../middleware/authenticate.middleware";
 
 const router = Router();
 
@@ -10,6 +11,8 @@ const router = Router();
  *     summary: Create a category
  *     tags:
  *       - Categories
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       $ref: '#/components/requestBodies/CreateCategoryRequest'
  *     responses:
@@ -21,6 +24,6 @@ const router = Router();
  *         description: Internal Server Error
  */
 
-router.post("/",categoryController.createCategory);
+router.post("/", authenticate, categoryController.createCategory);
 
 export default router;

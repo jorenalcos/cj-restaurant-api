@@ -1,5 +1,8 @@
 import { Router } from "express";
 import productController from "../../modules/product/controller";
+import { authenticate } from "../../middleware/authenticate.middleware";
+import { authorize } from "../../middleware/authorize.middleware";
+import { UserRole } from "@prisma/client";
 
 const router = Router();
 
@@ -10,6 +13,8 @@ const router = Router();
  *     summary: Get all products
  *     tags:
  *       - Products
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         $ref: '#/components/responses/ProductListResponse'
@@ -18,6 +23,8 @@ const router = Router();
  *     summary: Create Product
  *     tags:
  *       - Products
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       $ref: '#/components/requestBodies/CreateProductRequest'
  *     responses:
@@ -29,6 +36,8 @@ const router = Router();
  *     summary: Update Product
  *     tags:
  *       - Products
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - $ref: '#/components/parameters/ProductId'
  *     requestBody:
@@ -45,6 +54,8 @@ const router = Router();
  *     summary: Delete Product
  *     tags:
  *       - Products
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - $ref: '#/components/parameters/ProductId'
  *     responses:
@@ -58,10 +69,10 @@ const router = Router();
  *         $ref: '#/components/responses/NotFoundResponse'
  */
 
-router.get("/", productController.getProducts);
-router.get("/:id", productController.getProduct);
-router.post("/", productController.createProduct);
-router.put("/:id", productController.updateProduct);
-router.delete("/:id", productController.deleteProduct);
+router.get("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.getProducts);
+router.get("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.getProduct);
+router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.createProduct);
+router.put("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.updateProduct);
+router.delete("/:id", authenticate, authorize(UserRole.ADMIN), productController.deleteProduct);
 
 export default router;
