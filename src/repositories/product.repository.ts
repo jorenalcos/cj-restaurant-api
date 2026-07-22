@@ -1,6 +1,7 @@
 import { prisma } from "../config/prisma";
 
 export class ProductRepository {
+  [x: string]: any;
   async findAll() {
     return prisma.product.findMany({
       include: {

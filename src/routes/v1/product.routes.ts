@@ -70,8 +70,8 @@ const router = Router();
  */
 
 router.get("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.getProducts);
-router.get("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.getProduct);
-router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.createProduct);
+router.get("/:id", productController.getProduct);
+router.post("/", productController.createProduct);
 router.put("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.updateProduct);
 router.delete("/:id", authenticate, authorize(UserRole.ADMIN), productController.deleteProduct);
 

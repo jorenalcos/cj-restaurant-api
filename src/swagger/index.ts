@@ -15,6 +15,7 @@ import { LoginSchema } from "./components/schemas/login.schema";
 import { LoginResponse } from "./components/responses/login.response";
 import { AuthTag } from "./tags/auth.tag";
 import { ConflictResponse } from "./components/responses/conflict.response";
+import { NotFoundResponse } from "./responses/not-found.response";
 
 export const swaggerComponents = {
     schemas: {
@@ -35,7 +36,9 @@ export const swaggerComponents = {
         CategoryResponse,
         CategoryListResponse,
         ConflictResponse,
-        LoginResponse
+        LoginResponse,
+
+        NotFoundResponse
     },
     requestBodies: {
         ...requestBodies,
