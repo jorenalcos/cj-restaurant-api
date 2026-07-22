@@ -16,6 +16,8 @@ import { LoginResponse } from "./components/responses/login.response";
 import { AuthTag } from "./tags/auth.tag";
 import { ConflictResponse } from "./components/responses/conflict.response";
 import { NotFoundResponse } from "./responses/not-found.response";
+import { UnauthorizedResponse } from "./components/responses/unauthorized.response";
+import { ForbiddenResponse } from "./components/responses/forbidden.response";
 
 export const swaggerComponents = {
     schemas: {
@@ -38,7 +40,9 @@ export const swaggerComponents = {
         ConflictResponse,
         LoginResponse,
 
-        NotFoundResponse
+        NotFoundResponse,
+        UnauthorizedResponse,
+        ForbiddenResponse,
     },
     requestBodies: {
         ...requestBodies,
