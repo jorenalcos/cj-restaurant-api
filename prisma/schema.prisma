@@ -40,11 +40,11 @@ enum UserRole {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt  DateTime?
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   products Product[]
 }
@@ -62,12 +62,12 @@ model Product {
   isAvailable Boolean @default(true)
 
   category Category @relation(fields: [categoryId], references: [id])
-  
+
   orderItems OrderItem[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt     DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@index([categoryId])
 }
@@ -104,12 +104,15 @@ model OrderItem {
   orderId   Int
   productId Int
 
+  productName String
+
   quantity Int
 
-  price Decimal @db.Decimal(10, 2)
+  unitPrice Decimal @db.Decimal(10, 2)
 
-  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  subtotal Decimal @db.Decimal(10, 2)
 
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
 
   @@index([orderId])
@@ -117,26 +120,26 @@ model OrderItem {
 }
 
 model Payment {
-  id Int @id @default(autoincrement())
-  orderId Int @unique
-  method PaymentMethod
-  amount Decimal @db.Decimal(10, 2)
-  status PaymentStatus @default(PENDING)
+  id          Int           @id @default(autoincrement())
+  orderId     Int           @unique
+  method      PaymentMethod
+  amount      Decimal       @db.Decimal(10, 2)
+  status      PaymentStatus @default(PENDING)
   referenceNo String?
-  paidAt DateTime?
-  order Order @relation(fields: [orderId], references: [id])
-  createdAt DateTime @default(now())
+  paidAt      DateTime?
+  order       Order         @relation(fields: [orderId], references: [id])
+  createdAt   DateTime      @default(now())
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   firstName String
-  lastName String
-  email String @unique
-  password String
-  role UserRole @default(STAFF)
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  lastName  String
+  email     String    @unique
+  password  String
+  role      UserRole  @default(STAFF)
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }

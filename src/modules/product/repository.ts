@@ -9,6 +9,22 @@ class ProductRepository {
       },
       where: {
         deletedAt: null,
+        isAvailable: true,
+      },
+    });
+  }
+
+  async findManyByIds(ids: number[]) {
+    return prisma.product.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+        deletedAt: null,
+        isAvailable: true,
+      },
+      include: {
+        category: true,
       },
     });
   }
