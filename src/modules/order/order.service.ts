@@ -1,6 +1,6 @@
 import { NotFoundError } from "../../errors/NotFoundError";
 import { prisma } from "../../config/prisma";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, PaymentStatus } from "@prisma/client";
 
 import productRepository from "../product/repository";
 import orderRepository from "./order.repository";
@@ -8,6 +8,10 @@ import orderRepository from "./order.repository";
 import { CreateOrderInput } from "./dto/create-order.dto";
 
 export class OrderService {
+  private generateOrderNumber(): string {
+    return `ORD-${Date.now()}`;
+  }
+
   async createOrder(dto: CreateOrderInput) {
     // Extract all requested product IDs
     const productIds = dto.items.map((item) => item.productId);
@@ -26,9 +30,7 @@ export class OrderService {
 
     const orderItems = dto.items.map((item) => {
       const product = productMap.get(item.productId)!;
-
       const unitPrice = Number(product.price);
-
       const subtotal = unitPrice * item.quantity;
 
       return {
@@ -45,21 +47,35 @@ export class OrderService {
       0
     );
 
+    const paymentData = {
+      method: dto.paymentMethod,
+      amount: totalAmount,
+      status: PaymentStatus.PENDING,
+    };
+
+    const orderData = {
+      orderNumber: this.generateOrderNumber(),
+
+      customerName: dto.customerName,
+      phone: dto.phone,
+      address: dto.address,
+      notes: dto.notes,
+
+      subtotal: totalAmount,
+      deliveryFee: 0,
+      tax: 0,
+      discount: 0,
+      total: totalAmount,
+
+      status: OrderStatus.PENDING,
+    };
+    
     return prisma.$transaction(async (tx) => {
-      const order = await orderRepository.createOrder(tx, {
-        status: OrderStatus.PENDING,
-        paymentMethod: dto.paymentMethod,
-        totalAmount,
+      return orderRepository.createCompleteOrder(tx, {
+        order: orderData,
+        items: orderItems,
+        payment: paymentData,
       });
-
-      const orderItemData = orderItems.map((item) => ({
-        orderId: order.id,
-        ...item,
-      }));
-
-      await orderRepository.createOrderItems(tx, orderItemData);
-
-      return order;
     });
   }
 }

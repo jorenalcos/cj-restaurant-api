@@ -18,14 +18,26 @@ import { ConflictResponse } from "./components/responses/conflict.response";
 import { NotFoundResponse } from "./responses/not-found.response";
 import { UnauthorizedResponse } from "./components/responses/unauthorized.response";
 import { ForbiddenResponse } from "./components/responses/forbidden.response";
+import { CreateOrderSchema } from "./components/schemas/create-order.schema";
+import { OrderSchema } from "./components/schemas/order.schema";
+import { CreateOrderItemSchema } from "./components/schemas/order-item.schema";
+import { PaymentSchema } from "./components/schemas/payment.schema";
+import { OrderResponse } from "./components/responses/order.response";
+import { OrderTag } from "./tags/order.tag";
+import { CreateOrderResponse } from "./components/schemas/create-order.response";
 
 export const swaggerComponents = {
     schemas: {
+        Login: LoginSchema,
+
         ApiResponse: ApiResponseSchema,
         Category: CategorySchema,
         Product: ProductSchema,
 
-        Login: LoginSchema,
+        CreateOrder: CreateOrderSchema,
+        CreateOrderItemSchema: CreateOrderItemSchema,
+        Order: OrderSchema,
+        Payment: PaymentSchema,
     },
     parameters: {
         ProductId: ProductIdParameter,
@@ -43,6 +55,8 @@ export const swaggerComponents = {
         NotFoundResponse,
         UnauthorizedResponse,
         ForbiddenResponse,
+
+        CreateOrderResponse,
     },
     requestBodies: {
         ...requestBodies,
@@ -50,7 +64,8 @@ export const swaggerComponents = {
 };
 
 export const swaggerTags = [
+    AuthTag,
     ProductTag,
     CategoryTag,
-    AuthTag,
+    OrderTag,
 ];

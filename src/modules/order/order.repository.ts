@@ -1,22 +1,43 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import { prisma } from "../../config/prisma";
+import { Prisma } from "@prisma/client";
+import { CreateCompleteOrderPayload } from "./types/create-complete-order.type"
 
 export class OrderRepository {
-  async createOrder(
+  async createCompleteOrder(
     tx: Prisma.TransactionClient,
-    data: Prisma.OrderCreateInput
+    payload: CreateCompleteOrderPayload
   ) {
-    return tx.order.create({
-      data,
-    });
-  }
+    const { order, items, payment } = payload;
 
-  async createOrderItems(
-    tx: Prisma.TransactionClient,
-    data: Prisma.OrderItemCreateManyInput[]
-  ) {
-    return tx.orderItem.createMany({
-      data,
+    const createdOrder = await tx.order.create({
+      data: order,
+    });
+
+    await tx.orderItem.createMany({
+      data: items.map((item) => ({
+        ...item,
+        orderId: createdOrder.id,
+      })),
+    });
+
+    await tx.payment.create({
+      data: {
+        ...payment,
+        order: {
+          connect: {
+            id: createdOrder.id,
+          },
+        },
+      },
+    });
+
+    return tx.order.findUnique({
+      where: {
+        id: createdOrder.id,
+      },
+      include: {
+        items: true,
+        payment: true,
+      },
     });
   }
 }
