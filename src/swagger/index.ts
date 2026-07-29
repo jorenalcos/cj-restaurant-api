@@ -25,6 +25,7 @@ import { PaymentSchema } from "./components/schemas/payment.schema";
 import { OrderResponse } from "./components/responses/order.response";
 import { OrderTag } from "./tags/order.tag";
 import { CreateOrderResponse } from "./components/schemas/create-order.response";
+import { OrderListResponse } from "./components/responses/order-list.response";
 
 export const swaggerComponents = {
     schemas: {
@@ -35,7 +36,7 @@ export const swaggerComponents = {
         Product: ProductSchema,
 
         CreateOrder: CreateOrderSchema,
-        CreateOrderItemSchema: CreateOrderItemSchema,
+        CreateOrderItem: CreateOrderItemSchema,
         Order: OrderSchema,
         Payment: PaymentSchema,
     },
@@ -57,6 +58,7 @@ export const swaggerComponents = {
         ForbiddenResponse,
 
         CreateOrderResponse,
+        OrderListResponse
     },
     requestBodies: {
         ...requestBodies,

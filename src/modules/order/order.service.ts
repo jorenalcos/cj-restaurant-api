@@ -24,6 +24,7 @@ export class OrderService {
       throw new NotFoundError("One or more products were not found.");
     }
 
+    //Find all ordered products
     const productMap = new Map(
       products.map((product) => [product.id, product])
     );
@@ -69,7 +70,7 @@ export class OrderService {
 
       status: OrderStatus.PENDING,
     };
-    
+
     return prisma.$transaction(async (tx) => {
       return orderRepository.createCompleteOrder(tx, {
         order: orderData,
@@ -77,6 +78,10 @@ export class OrderService {
         payment: paymentData,
       });
     });
+  }
+
+  async getOrders() {
+    return orderRepository.findAll();
   }
 }
 

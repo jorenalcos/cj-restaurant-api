@@ -20,6 +20,19 @@ export class OrderController {
       next(error);
     }
   }
+
+  async getOrders(req: Request, res: Response, next: NextFunction) {
+    try {
+      const orders = await orderService.getOrders();
+
+      return res.status(200).json({
+        success: true,
+        data: orders,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new OrderController();

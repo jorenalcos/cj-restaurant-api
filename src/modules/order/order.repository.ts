@@ -1,11 +1,9 @@
 import { Prisma } from "@prisma/client";
 import { CreateCompleteOrderPayload } from "./types/create-complete-order.type"
+import { prisma } from "../../config/prisma";
 
 export class OrderRepository {
-  async createCompleteOrder(
-    tx: Prisma.TransactionClient,
-    payload: CreateCompleteOrderPayload
-  ) {
+  async createCompleteOrder(tx: Prisma.TransactionClient, payload: CreateCompleteOrderPayload) {
     const { order, items, payment } = payload;
 
     const createdOrder = await tx.order.create({
@@ -37,6 +35,18 @@ export class OrderRepository {
       include: {
         items: true,
         payment: true,
+      },
+    });
+  }
+
+  async findAll() {
+    return prisma.order.findMany({
+      include: {
+        items: true,
+        payment: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   }
