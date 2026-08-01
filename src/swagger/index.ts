@@ -20,12 +20,24 @@ import { UnauthorizedResponse } from "./components/responses/unauthorized.respon
 import { ForbiddenResponse } from "./components/responses/forbidden.response";
 import { CreateOrderSchema } from "./components/schemas/create-order.schema";
 import { OrderSchema } from "./components/schemas/order.schema";
-import { CreateOrderItemSchema } from "./components/schemas/order-item.schema";
+import { OrderItemSchema } from "./components/schemas/order-item.schema";
 import { PaymentSchema } from "./components/schemas/payment.schema";
 import { OrderResponse } from "./components/responses/order.response";
 import { OrderTag } from "./tags/order.tag";
 import { CreateOrderResponse } from "./components/schemas/create-order.response";
 import { OrderListResponse } from "./components/responses/order-list.response";
+import { OrderIdParameter } from "./components/parameters/order.id.parameter";
+import { CreateOrderItemSchema } from "./components/schemas/create-order-item.schema";
+import { InternalServerErrorResponse } from "./components/responses/internal-server-error.response";
+import { UpdateOrderStatusSchema } from "./components/schemas/update-order-status.schema";
+import { UpdateOrderStatusResponse } from "./components/responses/update-order-status.response";
+import { UpdatePaymentStatusSchema } from "./components/schemas/update-payment-status.schema";
+import { PaymentIdParameter } from "./components/parameters/payment-id.parameter";
+import { UpdatePaymentStatusResponse } from "./components/responses/update-payment-status.response";
+import { PaymentListResponse } from "./components/responses/payment-list.response";
+import { PaymentResponse } from "./components/responses/payment.response";
+import { PaymentTag } from "./tags/payment.tag";
+import { CancelOrderResponse } from "./components/responses/cancel-order-response";
 
 export const swaggerComponents = {
     schemas: {
@@ -37,12 +49,18 @@ export const swaggerComponents = {
 
         CreateOrder: CreateOrderSchema,
         CreateOrderItem: CreateOrderItemSchema,
+        OrderItem: OrderItemSchema,
         Order: OrderSchema,
+        UpdateOrderStatus: UpdateOrderStatusSchema,
+
         Payment: PaymentSchema,
+        UpdatePaymentStatus: UpdatePaymentStatusSchema,
     },
     parameters: {
         ProductId: ProductIdParameter,
         CategoryId: CategoryIdParameter,
+        OrderId: OrderIdParameter,
+        PaymentId: PaymentIdParameter,
     },
     responses: {
         ProductResponse,
@@ -58,7 +76,16 @@ export const swaggerComponents = {
         ForbiddenResponse,
 
         CreateOrderResponse,
-        OrderListResponse
+        OrderListResponse,
+        OrderResponse,
+        UpdateOrderStatusResponse,
+        CancelOrderResponse,
+
+        InternalServerErrorResponse,
+
+        PaymentResponse,
+        PaymentListResponse,
+        UpdatePaymentStatusResponse,
     },
     requestBodies: {
         ...requestBodies,
@@ -70,4 +97,5 @@ export const swaggerTags = [
     ProductTag,
     CategoryTag,
     OrderTag,
+    PaymentTag
 ];

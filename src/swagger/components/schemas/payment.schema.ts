@@ -1,12 +1,14 @@
 export const PaymentSchema = {
   type: "object",
-
   properties: {
     id: {
       type: "integer",
       example: 1,
     },
-
+    orderId: {
+      type: "integer",
+      example: 1,
+    },
     method: {
       type: "string",
       enum: [
@@ -16,14 +18,12 @@ export const PaymentSchema = {
         "MAYA",
         "CARD",
       ],
+      example: "GCASH",
     },
-
     amount: {
       type: "number",
-      format: "decimal",
-      example: 998,
+      example: 599.99,
     },
-
     status: {
       type: "string",
       enum: [
@@ -32,23 +32,24 @@ export const PaymentSchema = {
         "FAILED",
         "REFUNDED",
       ],
+      example: "PENDING",
     },
-
     referenceNo: {
       type: "string",
       nullable: true,
-      example: "GC123456789",
+      example: "GCASH-123456789",
     },
-
     paidAt: {
       type: "string",
       format: "date-time",
       nullable: true,
     },
-
     createdAt: {
       type: "string",
       format: "date-time",
+    },
+    order: {
+      $ref: "#/components/schemas/Order",
     },
   },
 };

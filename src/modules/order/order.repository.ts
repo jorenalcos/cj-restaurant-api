@@ -1,11 +1,13 @@
-import { Prisma } from "@prisma/client";
+import { OrderStatus, Prisma } from "@prisma/client";
 import { CreateCompleteOrderPayload } from "./types/create-complete-order.type"
-import { prisma } from "../../config/prisma";
+import { DatabaseClient, db } from "../../types/database";
 
 export class OrderRepository {
+  constructor(
+    private readonly database: DatabaseClient = db
+  ) { }
   async createCompleteOrder(tx: Prisma.TransactionClient, payload: CreateCompleteOrderPayload) {
     const { order, items, payment } = payload;
-
     const createdOrder = await tx.order.create({
       data: order,
     });
@@ -40,13 +42,51 @@ export class OrderRepository {
   }
 
   async findAll() {
-    return prisma.order.findMany({
+    return this.database.order.findMany({
       include: {
         items: true,
         payment: true,
       },
       orderBy: {
         createdAt: "desc",
+      },
+    });
+  }
+
+  async findById(id: number) {
+    return this.database.order.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        items: true,
+        payment: true,
+      },
+    });
+  }
+
+  async updateStatus(id: number, status: OrderStatus) {
+    return this.database.order.update({
+      where: {
+        id,
+      },
+      data: {
+        status,
+      },
+    });
+  }
+
+  async cancel(id: number) {
+    return this.database.order.update({
+      where: {
+        id,
+      },
+      data: {
+        status: OrderStatus.CANCELLED,
+      },
+      include: {
+        items: true,
+        payment: true,
       },
     });
   }

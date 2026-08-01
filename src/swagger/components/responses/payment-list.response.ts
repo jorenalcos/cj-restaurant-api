@@ -1,7 +1,5 @@
-// components/responses/order.response.ts
-
-export const OrderResponse = {
-  description: "Order retrieved successfully.",
+export const PaymentListResponse = {
+  description: "Payments retrieved successfully.",
   content: {
     "application/json": {
       schema: {
@@ -12,7 +10,10 @@ export const OrderResponse = {
             example: true,
           },
           data: {
-            $ref: "#/components/schemas/Order",
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/Payment",
+            },
           },
         },
       },

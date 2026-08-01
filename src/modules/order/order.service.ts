@@ -6,6 +6,9 @@ import productRepository from "../product/repository";
 import orderRepository from "./order.repository";
 
 import { CreateOrderInput } from "./dto/create-order.dto";
+import { ORDER_STATUS_TRANSITIONS } from "./constants/order-status-transition";
+import { BadRequestError } from "../../errors/BadRequestError";
+import { CANCELLABLE_ORDER_STATUSES } from "./constants/order.constants";
 
 export class OrderService {
   private generateOrderNumber(): string {
@@ -82,6 +85,51 @@ export class OrderService {
 
   async getOrders() {
     return orderRepository.findAll();
+  }
+
+  async getOrder(id: number) {
+    const order = await orderRepository.findById(id);
+
+    if (!order) {
+      throw new NotFoundError("Order not found.");
+    }
+
+    return order;
+  }
+
+  async updateOrderStatus(id: number, status: OrderStatus) {
+    const order = await orderRepository.findById(id);
+
+    if (!order) {
+      throw new NotFoundError("Order not found.");
+    }
+
+    const currentStatus: OrderStatus = order.status;
+    const allowedStatuses = ORDER_STATUS_TRANSITIONS[currentStatus];
+
+    if (!allowedStatuses.includes(status)) {
+      throw new BadRequestError(
+        `Invalid status transition. Order status can only change from ${currentStatus} to ${allowedStatuses.join(", ")}.`
+      );
+    }
+
+    return orderRepository.updateStatus(id, status);
+  }
+
+  async cancelOrder(id: number) {
+    const order = await orderRepository.findById(id);
+
+    if (!order) {
+      throw new NotFoundError("Order not found.");
+    }
+
+    if (!CANCELLABLE_ORDER_STATUSES.includes(order.status)) {
+      throw new BadRequestError(
+        `Order cannot be cancelled because it is currently ${order.status}.`
+      );
+    }
+
+    return orderRepository.cancel(id);
   }
 }
 

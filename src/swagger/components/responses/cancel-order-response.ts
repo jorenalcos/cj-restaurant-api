@@ -1,7 +1,5 @@
-// components/responses/order.response.ts
-
-export const OrderResponse = {
-  description: "Order retrieved successfully.",
+export const CancelOrderResponse = {
+  description: "Order cancelled successfully.",
   content: {
     "application/json": {
       schema: {
@@ -10,6 +8,10 @@ export const OrderResponse = {
           success: {
             type: "boolean",
             example: true,
+          },
+          message: {
+            type: "string",
+            example: "Order cancelled successfully.",
           },
           data: {
             $ref: "#/components/schemas/Order",
