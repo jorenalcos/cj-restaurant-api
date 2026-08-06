@@ -1,13 +1,20 @@
 import { PaymentStatus } from "@prisma/client";
 import { DatabaseClient, db } from "../../types/database";
+import { prisma } from "../../config/prisma";
 
 export class PaymentRepository {
   constructor(
     private readonly database: DatabaseClient = db
   ) { }
 
-  async findAll() {
-    return this.database.payment.findMany({
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const totalItems = await this.database.payment.count();
+
+    const payments = await this.database.payment.findMany({
+      skip,
+      take: limit,
       include: {
         order: true,
       },
@@ -15,6 +22,11 @@ export class PaymentRepository {
         createdAt: "desc",
       },
     });
+
+    return {
+      payments,
+      totalItems,
+    };
   }
 
   async findById(id: number) {

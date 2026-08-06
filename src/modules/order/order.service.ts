@@ -9,6 +9,7 @@ import { CreateOrderInput } from "./dto/create-order.dto";
 import { ORDER_STATUS_TRANSITIONS } from "./constants/order-status-transition";
 import { BadRequestError } from "../../errors/BadRequestError";
 import { CANCELLABLE_ORDER_STATUSES } from "./constants/order.constants";
+import { createPaginationMeta } from "../../common/pagination/pagination.util";
 
 export class OrderService {
   private generateOrderNumber(): string {
@@ -83,8 +84,18 @@ export class OrderService {
     });
   }
 
-  async getOrders() {
-    return orderRepository.findAll();
+  async getOrders(page: number, limit: number) {
+    const { orders, totalItems } = await orderRepository.findAll(page, limit);
+
+    return {
+      data: orders,
+
+      pagination: createPaginationMeta(
+        page,
+        limit,
+        totalItems
+      ),
+    };
   }
 
   async getOrder(id: number) {

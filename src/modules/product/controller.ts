@@ -4,74 +4,76 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { successResponse } from "../../utils/response";
 import { ProductIdDto } from "./dto/product-id.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
+import { PaginationDto } from "../../common/pagination/pagination.dto";
 
 class ProductController {
-    async getProducts(req: Request, res: Response, next: NextFunction) {
-        try {
-            const products = await productService.getProducts();
+  async getProducts(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { page, limit } = PaginationDto.parse(req.query);
+      const products = await productService.getProducts(page, limit);
 
-            return successResponse(
-                res,
-                "Products retrieved successfully",
-                products
-            );
-        } catch (error) {
-            next(error);
-        }
+      return successResponse(
+        res,
+        "Products retrieved successfully",
+        products
+      );
+    } catch (error) {
+      next(error);
     }
+  }
 
-    async getProduct(req: Request, res: Response, next: NextFunction) {
-        try {
-            const id = Number(req.params.id);
+  async getProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = Number(req.params.id);
 
-            const product = await productService.getProduct(id);
+      const product = await productService.getProduct(id);
 
-            return successResponse(
-                res,
-                "Product retrieved successfully",
-                product
-            );
-        } catch (error) {
-            next(error);
-        }
+      return successResponse(
+        res,
+        "Product retrieved successfully",
+        product
+      );
+    } catch (error) {
+      next(error);
     }
+  }
 
-    async createProduct(req: Request, res: Response) {
-        const dto = CreateProductDto.parse(req.body);
+  async createProduct(req: Request, res: Response) {
+    const dto = CreateProductDto.parse(req.body);
 
-        const product = await productService.createProduct(dto);
+    const product = await productService.createProduct(dto);
 
-        return res.status(201).json({
-            success: true,
-            message: "Product created successfully",
-            data: product,
-        });
-    }
+    return res.status(201).json({
+      success: true,
+      message: "Product created successfully",
+      data: product,
+    });
+  }
 
-    async updateProduct(req: Request, res: Response) {
-        const { id } = ProductIdDto.parse(req.params);
-        const dto = UpdateProductDto.parse(req.body);
-        const product = await productService.updateProduct(id, dto);
+  async updateProduct(req: Request, res: Response) {
+    const { id } = ProductIdDto.parse(req.params);
+    const dto = UpdateProductDto.parse(req.body);
+    const product = await productService.updateProduct(id, dto);
 
-        return res.status(200).json({
-            success: true,
-            message:
-                "Product updated successfully",
-            data: product,
-        });
-    }
+    return res.status(200).json({
+      success: true,
+      message:
+        "Product updated successfully",
+      data: product,
+    });
+  }
 
-    async deleteProduct(req: Request, res: Response) {
-        const { id } = ProductIdDto.parse(req.params);
-        
-        await productService.deleteProduct(id);
-        return res.status(200).json({
-            success: true,
-            message:
-                "Product deleted successfully",
-        });
+  async deleteProduct(req: Request, res: Response) {
+    const { id } = ProductIdDto.parse(req.params);
 
-    }
+    await productService.deleteProduct(id);
+    return res.status(200).json({
+      success: true,
+      message:
+        "Product deleted successfully",
+    });
+
+  }
 }
 
 export default new ProductController();

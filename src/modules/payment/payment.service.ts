@@ -9,10 +9,21 @@ import { PAYMENT_STATUS_TRANSITIONS } from "./constants/payment-status-transitio
 import { OrderRepository } from "../order/order.repository";
 import { PAYMENT_ORDER_STATUS } from "./constants/payment-order-status";
 import { prisma } from "../../config/prisma";
+import { createPaginationMeta } from "../../common/pagination/pagination.util";
 
 export class PaymentService {
-  async getPayments() {
-    return paymentRepository.findAll();
+  async getPayments(page: number, limit: number) {
+    const { payments, totalItems } = await paymentRepository.findAll(page, limit);
+
+    return {
+      data: payments,
+
+      pagination: createPaginationMeta(
+        page,
+        limit,
+        totalItems
+      ),
+    };
   }
 
   async getPayment(id: number) {
@@ -52,7 +63,7 @@ export class PaymentService {
       if (nextOrderStatus) {
         await orderRepo.updateStatus(payment.orderId, nextOrderStatus);
       }
-      
+
       return updatedPayment;
     });
   }

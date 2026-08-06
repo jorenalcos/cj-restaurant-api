@@ -12,18 +12,17 @@ const router = Router();
  * /orders:
  *   get:
  *     summary: Get all orders
- *     description: Retrieve a list of all customer orders.
  *     tags:
  *       - Orders
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/Page'
+ *       - $ref: '#/components/parameters/Limit'
  *     responses:
  *       200:
  *         $ref: '#/components/responses/OrderListResponse'
- *       401:
- *         $ref: '#/components/responses/UnauthorizedResponse'
- *       403:
- *         $ref: '#/components/responses/ForbiddenResponse'
+ * 
  *   post:
  *     summary: Create a new order
  *     description: Create a customer order with order items and payment information.

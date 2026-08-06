@@ -1,6 +1,7 @@
 import { OrderStatus, Prisma } from "@prisma/client";
 import { CreateCompleteOrderPayload } from "./types/create-complete-order.type"
 import { DatabaseClient, db } from "../../types/database";
+import { prisma } from "../../config/prisma";
 
 export class OrderRepository {
   constructor(
@@ -41,8 +42,13 @@ export class OrderRepository {
     });
   }
 
-  async findAll() {
-    return this.database.order.findMany({
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+    const totalItems = await this.database.order.count();
+
+    const orders = await this.database.order.findMany({
+      skip,
+      take: limit,
       include: {
         items: true,
         payment: true,
@@ -51,6 +57,11 @@ export class OrderRepository {
         createdAt: "desc",
       },
     });
+
+    return {
+      orders,
+      totalItems,
+    };
   }
 
   async findById(id: number) {

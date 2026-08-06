@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import orderService from "./order.service";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderStatusDto } from "./dto/update-order-status.dto";
+import { PaginationDto } from "../../common/pagination/pagination.dto";
 
 export class OrderController {
   async createOrder(req: Request, res: Response, next: NextFunction) {
@@ -24,7 +25,8 @@ export class OrderController {
 
   async getOrders(req: Request, res: Response, next: NextFunction) {
     try {
-      const orders = await orderService.getOrders();
+      const { page, limit } = PaginationDto.parse(req.query);
+      const orders = await orderService.getOrders(page, limit);
 
       return res.status(200).json({
         success: true,

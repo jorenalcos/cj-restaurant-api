@@ -4,6 +4,7 @@ import { ConflictError } from "../../errors/ConflictError";
 import { NotFoundError } from "../../errors/NotFoundError";
 import { UpdateCategoryInput } from "./dto/update-category.dto";
 import productRepository from "../../repositories/product.repository";
+import { createPaginationMeta } from "../../common/pagination/pagination.util";
 
 class CategoryService {
   async createCategory(dto: CreateCategoryInput) {
@@ -21,8 +22,18 @@ class CategoryService {
     });
   }
 
-  async getCategories() {
-    return await categoryRepository.findAll();
+  async getCategories(page: number, limit: number) {
+    const { categories, totalItems } = await categoryRepository.findAll(page, limit);
+
+    return {
+      data: categories,
+
+      pagination: createPaginationMeta(
+        page,
+        limit,
+        totalItems
+      ),
+    };
   }
 
   async getCategory(id: number) {

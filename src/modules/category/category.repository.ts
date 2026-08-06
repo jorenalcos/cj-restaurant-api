@@ -24,8 +24,18 @@ class CategoryRepository {
     });
   }
 
-  async findAll() {
-    return prisma.category.findMany({
+  async findAll(page: number, limit: number) {
+    const skip = (page - 1) * limit;
+
+    const totalItems = await prisma.category.count({
+      where: {
+        deletedAt: null,
+      },
+    });
+
+    const categories = await prisma.category.findMany({
+      skip,
+      take: limit,
       where: {
         deletedAt: null,
       },
@@ -44,6 +54,11 @@ class CategoryRepository {
         createdAt: "desc",
       },
     });
+
+    return {
+      categories,
+      totalItems,
+    };
   }
 
   async create(data: Prisma.CategoryCreateInput): Promise<Category> {

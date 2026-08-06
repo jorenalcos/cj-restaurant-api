@@ -31,6 +31,9 @@ const router = Router();
  *       - Categories
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/Page'
+ *       - $ref: '#/components/parameters/Limit'
  *     responses:
  *       200:
  *         $ref: '#/components/responses/CategoryListResponse'

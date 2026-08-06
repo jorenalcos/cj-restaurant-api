@@ -2,8 +2,19 @@ import { prisma } from "../../config/prisma";
 import { Prisma, Product } from "@prisma/client";
 
 class ProductRepository {
-  async findAll() {
-    return prisma.product.findMany({
+  async findAll(page: number, limit: number) {
+    const skip = (page && limit) ? (page - 1) * limit : 0;
+    const take = limit || 10;
+
+    const totalItems = await prisma.product.count({
+      where: {
+        deletedAt: null,
+      },
+    });
+
+    const products = await prisma.product.findMany({
+      skip,
+      take: take,
       include: {
         category: true,
       },
@@ -12,6 +23,11 @@ class ProductRepository {
         isAvailable: true,
       },
     });
+
+    return {
+      products,
+      totalItems,
+    };
   }
 
   async findManyByIds(ids: number[]) {

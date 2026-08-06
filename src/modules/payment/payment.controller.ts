@@ -2,11 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { UpdatePaymentStatusDto } from "./dto/update-payment-status.dto";
 
 import paymentService from "./payment.service";
+import { PaginationDto } from "../../common/pagination/pagination.dto";
 
 export class PaymentController {
   async getPayments(req: Request, res: Response, next: NextFunction) {
     try {
-      const payments = await paymentService.getPayments();
+      const { page, limit } = PaginationDto.parse(req.query);
+      const payments = await paymentService.getPayments(page, limit);
 
       return res.status(200).json({
         success: true,

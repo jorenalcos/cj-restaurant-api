@@ -38,6 +38,8 @@ import { PaymentListResponse } from "./components/responses/payment-list.respons
 import { PaymentResponse } from "./components/responses/payment.response";
 import { PaymentTag } from "./tags/payment.tag";
 import { CancelOrderResponse } from "./components/responses/cancel-order-response";
+import { LimitParameter } from "./components/parameters/limit.parameter";
+import { PageParameter } from "./components/parameters/page.parameter";
 
 export const swaggerComponents = {
     schemas: {
@@ -61,6 +63,9 @@ export const swaggerComponents = {
         CategoryId: CategoryIdParameter,
         OrderId: OrderIdParameter,
         PaymentId: PaymentIdParameter,
+
+        Page: PageParameter,
+        Limit: LimitParameter,
     },
     responses: {
         ProductResponse,

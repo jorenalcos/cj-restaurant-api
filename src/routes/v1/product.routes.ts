@@ -15,6 +15,9 @@ const router = Router();
  *       - Products
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/Page'
+ *       - $ref: '#/components/parameters/Limit'
  *     responses:
  *       200:
  *         $ref: '#/components/responses/ProductListResponse'
