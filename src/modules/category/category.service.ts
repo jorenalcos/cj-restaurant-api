@@ -22,8 +22,8 @@ class CategoryService {
     });
   }
 
-  async getCategories(page: number, limit: number) {
-    const { categories, totalItems } = await categoryRepository.findAll(page, limit);
+  async getCategories(page: number, limit: number, search?: string, sortBy?: string, sortOrder?: string) {
+    const { categories, totalItems } = await categoryRepository.findAll(page, limit, search, sortBy, sortOrder);
 
     return {
       data: categories,

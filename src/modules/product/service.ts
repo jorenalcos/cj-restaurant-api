@@ -9,8 +9,8 @@ import { Prisma } from "@prisma/client";
 import { createPaginationMeta } from "../../common/pagination/pagination.util";
 
 class ProductService {
-  async getProducts(page: number, limit: number) {
-    const { products, totalItems } = await productRepository.findAll(page, limit);
+  async getProducts(page: number, limit: number, search?: string, sortBy?: string, sortOrder?: string, categoryId?: number, isAvailable?: boolean) {
+    const { products, totalItems } = await productRepository.findAll(page, limit, search, sortBy, sortOrder, categoryId, isAvailable);
 
     return {
       data: products,

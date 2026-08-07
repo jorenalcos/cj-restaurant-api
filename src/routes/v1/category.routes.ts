@@ -34,6 +34,8 @@ const router = Router();
  *     parameters:
  *       - $ref: '#/components/parameters/Page'
  *       - $ref: '#/components/parameters/Limit'
+ *       - $ref: '#/components/parameters/Search'
+ *       - $ref: '#/components/parameters/Sort'
  *     responses:
  *       200:
  *         $ref: '#/components/responses/CategoryListResponse'

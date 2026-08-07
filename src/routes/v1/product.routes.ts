@@ -18,6 +18,10 @@ const router = Router();
  *     parameters:
  *       - $ref: '#/components/parameters/Page'
  *       - $ref: '#/components/parameters/Limit'
+ *       - $ref: '#/components/parameters/Search'
+ *       - $ref: '#/components/parameters/Sort'
+ *       - $ref: '#/components/parameters/CategoryFilter'
+ *       - $ref: '#/components/parameters/IsAvailable'
  *     responses:
  *       200:
  *         $ref: '#/components/responses/ProductListResponse'

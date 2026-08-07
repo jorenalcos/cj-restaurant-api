@@ -40,6 +40,10 @@ import { PaymentTag } from "./tags/payment.tag";
 import { CancelOrderResponse } from "./components/responses/cancel-order-response";
 import { LimitParameter } from "./components/parameters/limit.parameter";
 import { PageParameter } from "./components/parameters/page.parameter";
+import { SearchParameter } from "./components/parameters/search.parameter";
+import { SortOrderParameter } from "./components/parameters/sort-order.parameter";
+import { CategoryFilterParameter } from "./components/parameters/categoryId.parameter";
+import { IsAvailableParameter } from "./components/parameters/isAvailable.parameter";
 
 export const swaggerComponents = {
     schemas: {
@@ -66,6 +70,10 @@ export const swaggerComponents = {
 
         Page: PageParameter,
         Limit: LimitParameter,
+        Search: SearchParameter,
+        Sort: SortOrderParameter,
+        CategoryFilter: CategoryFilterParameter,
+        IsAvailable: IsAvailableParameter
     },
     responses: {
         ProductResponse,

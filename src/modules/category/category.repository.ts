@@ -24,7 +24,7 @@ class CategoryRepository {
     });
   }
 
-  async findAll(page: number, limit: number) {
+  async findAll(page: number, limit: number, search?: string, sortBy?: string, sortOrder?: string) {
     const skip = (page - 1) * limit;
 
     const totalItems = await prisma.category.count({
@@ -33,11 +33,29 @@ class CategoryRepository {
       },
     });
 
+    const allowedSortFields = [
+      "createdAt",
+      "name"
+    ] as const;
+
+    type SortField = (typeof allowedSortFields)[number];
+    const sortField: SortField = allowedSortFields.includes(sortBy as SortField)
+      ? (sortBy as SortField)
+      : "createdAt";
+
     const categories = await prisma.category.findMany({
-      skip,
-      take: limit,
       where: {
         deletedAt: null,
+        ...(search && {
+          OR: [
+            {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }),
       },
       include: {
         _count: {
@@ -51,8 +69,10 @@ class CategoryRepository {
         },
       },
       orderBy: {
-        createdAt: "desc",
+        [sortField]: sortOrder,
       },
+      skip,
+      take: limit,
     });
 
     return {

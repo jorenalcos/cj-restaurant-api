@@ -3,7 +3,7 @@ import categoryService from "./category.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { CategoryIdDto } from "./dto/category-id.dto";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
-import { PaginationDto } from "../../common/pagination/pagination.dto";
+import { QueryDto } from "../../common/query/query.dto";
 
 class CategoryController {
   async createCategory(req: Request, res: Response) {
@@ -34,8 +34,8 @@ class CategoryController {
 
   async getCategories(req: Request, res: Response, next: NextFunction) {
     try {
-      const { page, limit } = PaginationDto.parse(req.query);
-      const categories = await categoryService.getCategories(page, limit);
+      const { page, limit, search, sortBy, sortOrder } = QueryDto.parse(req.query);
+      const categories = await categoryService.getCategories(page, limit, search, sortBy, sortOrder);
 
       return res.status(200).json({
         success: true,

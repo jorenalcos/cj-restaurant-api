@@ -2,7 +2,7 @@ import { prisma } from "../../config/prisma";
 import { Prisma, Product } from "@prisma/client";
 
 class ProductRepository {
-  async findAll(page: number, limit: number) {
+  async findAll(page: number, limit: number, search?: string, sortBy?: string, sortOrder?: string, categoryId?: number, isAvailable?: boolean) {
     const skip = (page && limit) ? (page - 1) * limit : 0;
     const take = limit || 10;
 
@@ -12,16 +12,48 @@ class ProductRepository {
       },
     });
 
+    const allowedSortFields = [
+      "createdAt",
+      "name",
+      "price",
+      "rating",
+    ] as const;
+
+    type SortField = (typeof allowedSortFields)[number];
+    const sortField: SortField = allowedSortFields.includes(sortBy as SortField)
+      ? (sortBy as SortField)
+      : "createdAt";
+
     const products = await prisma.product.findMany({
-      skip,
-      take: take,
+      where: {
+        deletedAt: null,
+        ...(categoryId && { categoryId, }),
+        ...(isAvailable !== undefined && { isAvailable, }),
+        ...(search && {
+          OR: [
+            {
+              name: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+            {
+              description: {
+                contains: search,
+                mode: "insensitive",
+              },
+            },
+          ],
+        }),
+      },
       include: {
         category: true,
       },
-      where: {
-        deletedAt: null,
-        isAvailable: true,
+      orderBy: {
+        [sortField]: sortOrder,
       },
+      skip,
+      take: take,
     });
 
     return {

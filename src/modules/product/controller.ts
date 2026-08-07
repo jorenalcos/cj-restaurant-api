@@ -4,13 +4,13 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { successResponse } from "../../utils/response";
 import { ProductIdDto } from "./dto/product-id.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
-import { PaginationDto } from "../../common/pagination/pagination.dto";
+import { QueryDto } from "../../common/query/query.dto";
 
 class ProductController {
   async getProducts(req: Request, res: Response, next: NextFunction) {
     try {
-      const { page, limit } = PaginationDto.parse(req.query);
-      const products = await productService.getProducts(page, limit);
+      const { page, limit, search, sortBy, sortOrder, categoryId, isAvailable } = QueryDto.parse(req.query);
+      const products = await productService.getProducts(page, limit, search, sortBy, sortOrder, categoryId, isAvailable);
 
       return successResponse(
         res,

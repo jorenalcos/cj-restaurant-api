@@ -1,4 +1,4 @@
-import prisma from "../../config/prisma";
+import { prisma } from "../../config/prisma";
 class CategoryRepository {
     async findById(id: number) {
         return prisma.category.findUnique({
