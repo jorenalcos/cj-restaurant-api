@@ -7,6 +7,7 @@ import { ConflictError } from "../../errors/ConflictError";
 import { UpdateProductInput } from "./dto/update-product.dto";
 import { Prisma } from "@prisma/client";
 import { createPaginationMeta } from "../../common/pagination/pagination.util";
+import imageService from "../../services/image.service";
 
 class ProductService {
   async getProducts(page: number, limit: number, search?: string, sortBy?: string, sortOrder?: string, categoryId?: number, isAvailable?: boolean) {
@@ -59,6 +60,21 @@ class ProductService {
         },
       },
     });
+  }
+
+  async uploadProductImage(productId: number, file: Express.Multer.File) {
+    const product = await productRepository.findById(productId);
+
+    if (!product) {
+      throw new NotFoundError("Product not found.");
+    }
+
+    const uploadedImage = await imageService.uploadImage(file.buffer);
+
+    return productRepository.updateImage(
+      productId,
+      uploadedImage.secure_url
+    );
   }
 
   async updateProduct(id: number, dto: UpdateProductInput) {

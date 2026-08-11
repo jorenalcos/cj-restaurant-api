@@ -3,6 +3,7 @@ import productController from "../../modules/product/controller";
 import { authenticate } from "../../middleware/authenticate.middleware";
 import { authorize } from "../../middleware/authorize.middleware";
 import { UserRole } from "@prisma/client";
+import { upload } from "../../middleware/upload.middleware";
 
 const router = Router();
 
@@ -37,6 +38,28 @@ const router = Router();
  *     responses:
  *       201:
  *         $ref: '#/components/responses/ProductResponse'
+ * 
+ * /products/{id}/image:
+ *   post:
+ *     summary: Upload product image
+ *     description: Upload or replace a product image.
+ *     tags:
+ *       - Products
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - $ref: '#/components/parameters/ProductId'
+ *     requestBody:
+ *       $ref: '#/components/requestBodies/UploadProductImageRequest'
+ *     responses:
+ *       200:
+ *         $ref: '#/components/responses/ProductResponse'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedResponse'
+ *       403:
+ *         $ref: '#/components/responses/ForbiddenResponse'
+ *       404:
+ *         $ref: '#/components/responses/NotFoundResponse'
  *
  * /products/{id}:
  *   put:
@@ -79,6 +102,7 @@ const router = Router();
 router.get("/", productController.getProducts);
 router.get("/:id", productController.getProduct);
 router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.createProduct);
+router.post("/:id/image", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), upload.single("image"), productController.uploadImage);
 router.put("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.updateProduct);
 router.delete("/:id", authenticate, authorize(UserRole.ADMIN), productController.deleteProduct);
 

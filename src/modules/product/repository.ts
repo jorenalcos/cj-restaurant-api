@@ -109,6 +109,17 @@ class ProductRepository {
 
   }
 
+  async updateImage(id: number, image: string) {
+    return prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        image,
+      },
+    });
+  }
+
   async update(id: number, data: Prisma.ProductUpdateInput): Promise<Product> {
     return prisma.product.update({
       where: {

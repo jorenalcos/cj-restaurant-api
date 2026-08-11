@@ -5,6 +5,7 @@ import { successResponse } from "../../utils/response";
 import { ProductIdDto } from "./dto/product-id.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { QueryDto } from "../../common/query/query.dto";
+import { BadRequestError } from "../../errors/BadRequestError";
 
 class ProductController {
   async getProducts(req: Request, res: Response, next: NextFunction) {
@@ -48,6 +49,26 @@ class ProductController {
       message: "Product created successfully",
       data: product,
     });
+  }
+
+  async uploadImage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const productId = Number(req.params.id);
+
+      if (!req.file) {
+        throw new BadRequestError("Image is required.");
+      }
+
+      const product = await productService.uploadProductImage(productId, req.file);
+
+      return res.status(200).json({
+        success: true,
+        message: "Product image uploaded successfully.",
+        data: product,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 
   async updateProduct(req: Request, res: Response) {
