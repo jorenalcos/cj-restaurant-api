@@ -109,13 +109,14 @@ class ProductRepository {
 
   }
 
-  async updateImage(id: number, image: string) {
+  async updateImage(id: number, image: string, imagePublicId: string) {
     return prisma.product.update({
       where: {
         id,
       },
       data: {
         image,
+        imagePublicId,
       },
     });
   }

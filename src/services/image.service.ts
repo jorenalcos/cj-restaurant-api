@@ -19,6 +19,10 @@ class ImageService {
       streamifier.createReadStream(buffer).pipe(stream);
     });
   }
+
+  async deleteImage(publicId: string) {
+    return cloudinary.uploader.destroy(publicId);
+  }
 }
 
 export default new ImageService();

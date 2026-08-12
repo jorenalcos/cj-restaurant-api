@@ -71,10 +71,22 @@ class ProductService {
 
     const uploadedImage = await imageService.uploadImage(file.buffer);
 
-    return productRepository.updateImage(
-      productId,
-      uploadedImage.secure_url
-    );
+    const oldImagePublicId = product.imagePublicId;
+
+    const updatedProduct = await productRepository.updateImage(productId, uploadedImage.secure_url, uploadedImage.public_id);
+
+    if (oldImagePublicId) {
+      try {
+        await imageService.deleteImage(oldImagePublicId);
+      } catch (error) {
+        console.error(
+          `Failed to delete old Cloudinary image: ${oldImagePublicId}`,
+          error
+        );
+      }
+    }
+
+    return updatedProduct;
   }
 
   async updateProduct(id: number, dto: UpdateProductInput) {

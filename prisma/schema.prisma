@@ -58,6 +58,7 @@ model Product {
 
   price       Decimal @db.Decimal(10, 2)
   image       String?
+  imagePublicId String?
   rating      Float   @default(5)
   isAvailable Boolean @default(true)
 
