@@ -70,25 +70,14 @@ export class DashboardService {
   }
 
   async getOrderTrends(dto: GetOrderTrendsInput) {
-    let trends;
 
-    switch (dto.period) {
-      case "daily":
-        trends = await dashboardRepository.getDailyOrderTrends();
-        break;
-
-      case "weekly":
-        trends = await dashboardRepository.getWeeklyOrderTrends();
-        break;
-
-      case "monthly":
-        trends = await dashboardRepository.getMonthlyOrderTrends();
-        break;
-
-      case "yearly":
-        trends = await dashboardRepository.getYearlyOrderTrends();
-        break;
-    }
+    const strategies = {
+      daily: () => dashboardRepository.getDailyOrderTrends(),
+      weekly: () => dashboardRepository.getWeeklyOrderTrends(),
+      monthly: () => dashboardRepository.getMonthlyOrderTrends(),
+      yearly: () => dashboardRepository.getYearlyOrderTrends(),
+    };
+    const trends = await strategies[dto.period]();
 
     return trends.map((trend) => ({
       label: trend.label,
