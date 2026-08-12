@@ -3,6 +3,7 @@ import dashboardService from "./dashboard.service";
 import { GetSalesDto } from "./dto/get-sales.dto";
 import { GetBestSellingDto } from "./dto/get-best-selling.dto";
 import { GetOrderTrendsDto } from "./dto/get-order-trends.dto";
+import { GetTopCustomersDto } from "./dto/get-top-customers.dto";
 
 export class DashboardController {
   async getStatistics(req: Request, res: Response, next: NextFunction) {
@@ -64,6 +65,36 @@ export class DashboardController {
         success: true,
         message: "Order trends retrieved successfully.",
         data: trends,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getTopCustomers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const dto = GetTopCustomersDto.parse(req.query);
+
+      const customers = await dashboardService.getTopCustomers(dto);
+
+      return res.status(200).json({
+        success: true,
+        message: "Top customers retrieved successfully.",
+        data: customers,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getPaymentSummary(req: Request, res: Response, next: NextFunction) {
+    try {
+      const summary = await dashboardService.getPaymentSummary();
+
+      return res.status(200).json({
+        success: true,
+        message: "Payment summary retrieved successfully.",
+        data: summary,
       });
     } catch (error) {
       next(error);

@@ -106,11 +106,55 @@ const router = Router();
  *         $ref: '#/components/responses/UnauthorizedResponse'
  *       403:
  *         $ref: '#/components/responses/ForbiddenResponse'
+ * 
+ * /dashboard/top-customers:
+ *   get:
+ *     summary: Get top customers
+ *     description: Retrieve customers ranked by total spending from delivered orders.
+ *     tags:
+ *       - Dashboard
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 50
+ *           default: 10
+ *         required: false
+ *         description: Number of top customers to return.
+ *     responses:
+ *       200:
+ *         $ref: '#/components/responses/TopCustomersResponse'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedResponse'
+ *       403:
+ *         $ref: '#/components/responses/ForbiddenResponse'
+ * 
+ * /dashboard/payment-summary:
+ *   get:
+ *     summary: Get payment summary
+ *     description: Retrieve successful payment transactions and revenue grouped by payment method.
+ *     tags:
+ *       - Dashboard
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         $ref: '#/components/responses/PaymentSummaryResponse'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedResponse'
+ *       403:
+ *         $ref: '#/components/responses/ForbiddenResponse'
  */
 
 router.get("/statistics", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), dashboardController.getStatistics);
 router.get("/sales", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), dashboardController.getSalesAnalytics);
 router.get("/best-selling", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), dashboardController.getBestSellingProducts);
 router.get("/order-trends", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), dashboardController.getOrderTrends);
+router.get("/top-customers", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), dashboardController.getTopCustomers);
+router.get("/payment-summary", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), dashboardController.getPaymentSummary);
 
 export default router;

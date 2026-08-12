@@ -237,6 +237,46 @@ export class DashboardRepository {
   async getYearlyOrderTrends() {
     return this.getOrderTrends("year", "YYYY");
   }
+
+  async getTopCustomers(limit: number) {
+    return prisma.$queryRaw<
+      {
+        customerName: string;
+        orders: bigint;
+        totalSpent: Prisma.Decimal;
+      }[]
+    >`
+      SELECT
+        "customerName",
+        COUNT(*) AS orders,
+        SUM(total) AS "totalSpent"
+      FROM "Order"
+      WHERE status = 'DELIVERED'
+      GROUP BY "customerName"
+      ORDER BY SUM(total) DESC
+      LIMIT ${limit};
+    `;
+  }
+
+  async getPaymentSummary() {
+    return prisma.$queryRaw<
+      {
+        method: string;
+        transactions: bigint;
+        revenue: Prisma.Decimal;
+      }[]
+    >`
+      SELECT
+        method,
+        COUNT(*) AS transactions,
+        SUM(amount) AS revenue
+      FROM "Payment"
+      WHERE status = 'PAID'
+      GROUP BY method
+      ORDER BY SUM(amount) DESC;
+    `;
+  }
+
 }
 
 export default new DashboardRepository();

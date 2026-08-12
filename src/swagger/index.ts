@@ -53,6 +53,10 @@ import { BestSellingProductsResponse } from "./components/responses/best-selling
 import { BestSellingProductSchema } from "./components/schemas/best-selling-product.schema";
 import { OrderTrendsResponse } from "./components/responses/order-trends-response";
 import { OrderTrendSchema } from "./components/schemas/order-trend-schema";
+import { TopCustomerSchema } from "./components/schemas/top-customer.schema";
+import { TopCustomersResponse } from "./components/responses/top-customers.response";
+import { PaymentSummarySchema } from "./components/schemas/payment-summary.schema";
+import { PaymentSummaryResponse } from "./components/responses/payment-summary.response";
 
 export const swaggerComponents = {
     schemas: {
@@ -74,7 +78,9 @@ export const swaggerComponents = {
         DashboardStatistics: DashboardStatisticsSchema,
         SalesAnalytics: SalesAnalyticsSchema,
         BestSellingProduct: BestSellingProductSchema,
-        OrderTrend : OrderTrendSchema
+        OrderTrend: OrderTrendSchema,
+        TopCustomer: TopCustomerSchema,
+        PaymentSummary: PaymentSummarySchema,
     },
     parameters: {
         ProductId: ProductIdParameter,
@@ -117,7 +123,9 @@ export const swaggerComponents = {
         DashboardStatisticsResponse,
         SalesAnalyticsResponse,
         BestSellingProductsResponse,
-        OrderTrendsResponse
+        OrderTrendsResponse,
+        TopCustomersResponse,
+        PaymentSummaryResponse
     },
     requestBodies: {
         ...requestBodies,
