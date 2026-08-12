@@ -4,6 +4,7 @@ import categoryRoutes from "./category.routes";
 import authRoutes from "./auth.routes";
 import orderRoutes from "./order.routes";
 import paymentRoutes from "./payment.route";
+import dashboardRoutes from "./dashboard.routes";
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use("/categories", categoryRoutes);
 router.use("/orders", orderRoutes);
 router.use("/auth", authRoutes);
 router.use("/payments", paymentRoutes);
+router.use("/dashboard", dashboardRoutes);
 
 export default router;

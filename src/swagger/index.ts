@@ -44,6 +44,15 @@ import { SearchParameter } from "./components/parameters/search.parameter";
 import { SortOrderParameter } from "./components/parameters/sort-order.parameter";
 import { CategoryFilterParameter } from "./components/parameters/categoryId.parameter";
 import { IsAvailableParameter } from "./components/parameters/isAvailable.parameter";
+import { DashboardTag } from "./tags/dashboard.tag";
+import { DashboardStatisticsSchema } from "./components/schemas/dashboard-statistics.schema";
+import { DashboardStatisticsResponse } from "./components/responses/dashboard-statistics.response";
+import { SalesAnalyticsSchema } from "./components/schemas/sales-analytics.schema";
+import { SalesAnalyticsResponse } from "./components/responses/sales-analytics.response";
+import { BestSellingProductsResponse } from "./components/responses/best-selling-products.response";
+import { BestSellingProductSchema } from "./components/schemas/best-selling-product.schema";
+import { OrderTrendsResponse } from "./components/responses/order-trends-response";
+import { OrderTrendSchema } from "./components/schemas/order-trend-schema";
 
 export const swaggerComponents = {
     schemas: {
@@ -61,6 +70,11 @@ export const swaggerComponents = {
 
         Payment: PaymentSchema,
         UpdatePaymentStatus: UpdatePaymentStatusSchema,
+
+        DashboardStatistics: DashboardStatisticsSchema,
+        SalesAnalytics: SalesAnalyticsSchema,
+        BestSellingProduct: BestSellingProductSchema,
+        OrderTrend : OrderTrendSchema
     },
     parameters: {
         ProductId: ProductIdParameter,
@@ -99,6 +113,11 @@ export const swaggerComponents = {
         PaymentResponse,
         PaymentListResponse,
         UpdatePaymentStatusResponse,
+
+        DashboardStatisticsResponse,
+        SalesAnalyticsResponse,
+        BestSellingProductsResponse,
+        OrderTrendsResponse
     },
     requestBodies: {
         ...requestBodies,
@@ -110,5 +129,6 @@ export const swaggerTags = [
     ProductTag,
     CategoryTag,
     OrderTag,
-    PaymentTag
+    PaymentTag,
+    DashboardTag
 ];
