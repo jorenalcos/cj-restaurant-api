@@ -23,7 +23,6 @@ export class DashboardController {
   async getSalesAnalytics(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = GetSalesDto.parse(req.query);
-
       const sales = await dashboardService.getSalesAnalytics(dto);
 
       return res.status(200).json({
@@ -40,9 +39,7 @@ export class DashboardController {
   async getBestSellingProducts(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = GetBestSellingDto.parse(req.query);
-
-      const products =
-        await dashboardService.getBestSellingProducts(dto);
+      const products = await dashboardService.getBestSellingProducts(dto);
 
       return res.status(200).json({
         success: true,
@@ -57,9 +54,7 @@ export class DashboardController {
   async getOrderTrends(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = GetOrderTrendsDto.parse(req.query);
-
-      const trends =
-        await dashboardService.getOrderTrends(dto);
+      const trends = await dashboardService.getOrderTrends(dto);
 
       return res.status(200).json({
         success: true,
@@ -74,7 +69,6 @@ export class DashboardController {
   async getTopCustomers(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = GetTopCustomersDto.parse(req.query);
-
       const customers = await dashboardService.getTopCustomers(dto);
 
       return res.status(200).json({
