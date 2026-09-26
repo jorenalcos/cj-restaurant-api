@@ -1,16 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 
 import orderService from "./order.service";
-import { CreateOrderDto } from "./dto/create-order.dto";
-import { UpdateOrderStatusDto } from "./dto/update-order-status.dto";
 import { PaginationDto } from "../../common/pagination/pagination.dto";
 
 export class OrderController {
   async createOrder(req: Request, res: Response, next: NextFunction) {
     try {
-      const dto = CreateOrderDto.parse(req.body);
-
-      const order = await orderService.createOrder(dto);
+      const order = await orderService.createOrder(req.body);
 
       return res.status(201).json({
         success: true,
@@ -55,8 +51,7 @@ export class OrderController {
   async updateStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
-      const dto = UpdateOrderStatusDto.parse(req.body);
-      const order = await orderService.updateOrderStatus(id, dto.status);
+      const order = await orderService.updateOrderStatus(id, req.body.status);
 
       return res.status(200).json({
         success: true,

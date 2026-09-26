@@ -4,6 +4,9 @@ import { authenticate } from "../../middleware/authenticate.middleware";
 import { authorize } from "../../middleware/authorize.middleware";
 import { UserRole } from "@prisma/client";
 import { upload } from "../../middleware/upload.middleware";
+import { validate } from "../../middleware/validate.middleware";
+import { CreateProductDto } from "../../modules/product/dto/create-product.dto";
+import { UpdateProductDto } from "../../modules/product/dto/update-product.dto";
 
 const router = Router();
 
@@ -101,9 +104,11 @@ const router = Router();
 
 router.get("/", productController.getProducts);
 router.get("/:id", productController.getProduct);
-router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.createProduct);
+router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), validate({ body: CreateProductDto }), productController.createProduct)
 router.post("/:id/image", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), upload.single("image"), productController.uploadImage);
-router.put("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), productController.updateProduct);
+router.put("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), validate({
+  body: UpdateProductDto,
+}), productController.updateProduct);
 router.delete("/:id", authenticate, authorize(UserRole.ADMIN), productController.deleteProduct);
 
 export default router;

@@ -3,6 +3,9 @@ import categoryController from "../../modules/category/category.controller";
 import { authenticate } from "../../middleware/authenticate.middleware";
 import { authorize } from "../../middleware/authorize.middleware";
 import { UserRole } from "@prisma/client";
+import { validate } from "../../middleware/validate.middleware";
+import { CreateCategoryDto } from "../../modules/category/dto/create-category.dto";
+import { UpdateCategoryDto } from "../../modules/category/dto/update-category.dto";
 
 const router = Router();
 
@@ -105,8 +108,8 @@ const router = Router();
  *         $ref: '#/components/responses/ForbiddenResponse'
  */
 
-router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), categoryController.createCategory);
-router.put("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), categoryController.updateCategory);
+router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), validate({ body: CreateCategoryDto }), categoryController.createCategory);
+router.put("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), validate({ body: UpdateCategoryDto }), categoryController.updateCategory);
 router.get("/", categoryController.getCategories);
 router.get("/:id", categoryController.getCategory);
 router.delete("/:id", authenticate, authorize(UserRole.ADMIN), categoryController.deleteCategory);

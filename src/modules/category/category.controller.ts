@@ -1,14 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import categoryService from "./category.service";
-import { CreateCategoryDto } from "./dto/create-category.dto";
 import { CategoryIdDto } from "./dto/category-id.dto";
-import { UpdateCategoryDto } from "./dto/update-category.dto";
 import { QueryDto } from "../../common/query/query.dto";
 
 class CategoryController {
   async createCategory(req: Request, res: Response) {
-    const dto = CreateCategoryDto.parse(req.body);
-    const category = await categoryService.createCategory(dto);
+    const category = await categoryService.createCategory(req.body);
 
     return res.status(201).json({
       success: true,
@@ -48,13 +45,8 @@ class CategoryController {
 
   async updateCategory(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } =
-        CategoryIdDto.parse(req.params);
-
-      const dto =
-        UpdateCategoryDto.parse(req.body);
-
-      const category = await categoryService.updateCategory(id, dto);
+      const { id } = CategoryIdDto.parse(req.params);
+      const category = await categoryService.updateCategory(id, req.body);
 
       return res.status(200).json({
         success: true,

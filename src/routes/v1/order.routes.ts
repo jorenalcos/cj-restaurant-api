@@ -4,6 +4,9 @@ import { authenticate } from "../../middleware/authenticate.middleware";
 import { authorize } from "../../middleware/authorize.middleware";
 import { UserRole } from "@prisma/client";
 import orderController from "../../modules/order/order.controller";
+import { validate } from "../../middleware/validate.middleware";
+import { CreateOrderDto } from "../../modules/order/dto/create-order.dto";
+import { UpdateOrderStatusDto } from "../../modules/order/dto/update-order-status.dto";
 
 const router = Router();
 
@@ -109,10 +112,10 @@ const router = Router();
  *         $ref: '#/components/responses/InternalServerErrorResponse'
  */
 
-router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), OrderController.createOrder);
+router.post("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), validate({ body: CreateOrderDto }), OrderController.createOrder);
 router.get("/", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), OrderController.getOrders);
 router.get("/:id", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), OrderController.getOrder);
-router.patch("/:id/status", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), orderController.updateStatus);
+router.patch("/:id/status", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), validate({ body: UpdateOrderStatusDto }), orderController.updateStatus);
 router.patch("/:id/cancel", authenticate, authorize(UserRole.ADMIN, UserRole.MANAGER), orderController.cancelOrder);
 
 export default router;

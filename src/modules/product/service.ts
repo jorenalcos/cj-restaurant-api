@@ -36,8 +36,7 @@ class ProductService {
   }
 
   async createProduct(dto: CreateProductInput) {
-    const category =
-      await categoryRepository.findById(dto.categoryId);
+    const category = await categoryRepository.findById(dto.categoryId);
     if (!category) {
       throw new NotFoundError("Category not found");
     }
