@@ -1,6 +1,9 @@
 import { Router } from "express";
 
 import authController from "../../modules/auth/auth.controller";
+import { authRateLimiter } from "../../middleware/rate-limit.middleware";
+import { LoginDto } from "../../modules/auth/dto/login.dto";
+import { validate } from "../../middleware/validate.middleware";
 
 const router = Router();
 
@@ -22,6 +25,6 @@ const router = Router();
  *         description: Internal Server Error
  */
 
-router.post("/login", authController.login);
+router.post("/login", authRateLimiter, validate({ body: LoginDto }), authController.login);
 
 export default router;

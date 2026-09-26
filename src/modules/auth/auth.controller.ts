@@ -4,9 +4,7 @@ import { LoginDto } from "./dto/login.dto";
 
 class AuthController {
   async login(req: Request, res: Response) {
-    const dto = LoginDto.parse(req.body);
-
-    const result = await authService.login(dto);
+    const result = await authService.login(req.body);
 
     return res.status(200).json({
       success: true,
